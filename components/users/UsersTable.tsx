@@ -18,32 +18,32 @@ interface UsersTableProps {
 export function UsersTable({ users, onChangeRole, onResetPassword, onDelete }: UsersTableProps) {
   const router = useRouter();
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-800/50 overflow-x-auto">
+    <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto shadow-sm">
       <Table>
         <TableHeader>
-          <TableRow className="border-slate-700 hover:bg-transparent">
-            <TableHead className="text-slate-400">Name</TableHead>
-            <TableHead className="text-slate-400">Email</TableHead>
-            <TableHead className="text-slate-400">Role</TableHead>
-            <TableHead className="text-slate-400">Status</TableHead>
-            <TableHead className="text-slate-400">Last Login</TableHead>
-            <TableHead className="text-slate-400">Created</TableHead>
-            <TableHead className="text-slate-400 text-right">Actions</TableHead>
+          <TableRow className="border-slate-200 hover:bg-transparent bg-slate-50">
+            <TableHead className="text-slate-700 font-semibold">Name</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Email</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Role</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Status</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Last Login</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Created</TableHead>
+            <TableHead className="text-slate-700 font-semibold text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user) => (
-            <TableRow key={user.id} className="border-slate-700 hover:bg-slate-700/30">
-              <TableCell className="font-medium text-white">{user.name}</TableCell>
-              <TableCell className="text-slate-300 text-sm">{user.email}</TableCell>
-              <TableCell className="text-slate-300">{USER_ROLES[user.role]}</TableCell>
+            <TableRow key={user.id} className="border-slate-200 hover:bg-slate-50">
+              <TableCell className="font-medium text-slate-900">{user.name}</TableCell>
+              <TableCell className="text-slate-700 text-sm">{user.email}</TableCell>
+              <TableCell className="text-slate-700">{USER_ROLES[user.role]}</TableCell>
               <TableCell>
                 <StatusBadge status="active" />
               </TableCell>
-              <TableCell className="text-slate-400 text-sm">
+              <TableCell className="text-slate-700 text-sm">
                 {user.lastLogin ? formatDate(user.lastLogin) : 'Never'}
               </TableCell>
-              <TableCell className="text-slate-400 text-sm">{formatDate(user.createdAt)}</TableCell>
+              <TableCell className="text-slate-700 text-sm">{formatDate(user.createdAt)}</TableCell>
               <TableCell className="text-right">
                 <ActionDropdown
                   actions={[

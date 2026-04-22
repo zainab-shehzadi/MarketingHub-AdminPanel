@@ -32,15 +32,15 @@ export function OrganizationFilters({ onSearchChange, onPlanChange, onStatusChan
             setSearch(e.target.value);
             onSearchChange?.(e.target.value);
           }}
-          className="pl-10 bg-slate-700 border-slate-600 text-white placeholder:text-slate-500"
+          className="pl-10 bg-white border-slate-200 text-slate-900 placeholder:text-slate-500 focus:border-orange-600 focus:ring-orange-600"
         />
       </div>
 
       <Select onValueChange={onPlanChange}>
-        <SelectTrigger className="bg-slate-700 border-slate-600 text-white w-full md:w-48">
+        <SelectTrigger className="bg-white border-slate-200 text-slate-900 w-full md:w-48 focus:border-orange-600 focus:ring-orange-600">
           <SelectValue placeholder="All Plans" />
         </SelectTrigger>
-        <SelectContent className="bg-slate-700 border-slate-600">
+        <SelectContent className="bg-white border-slate-200">
           <SelectItem value="all">All Plans</SelectItem>
           <SelectItem value="starter">Starter</SelectItem>
           <SelectItem value="professional">Professional</SelectItem>
@@ -49,10 +49,10 @@ export function OrganizationFilters({ onSearchChange, onPlanChange, onStatusChan
       </Select>
 
       <Select onValueChange={onStatusChange}>
-        <SelectTrigger className="bg-slate-700 border-slate-600 text-white w-full md:w-48">
+        <SelectTrigger className="bg-white border-slate-200 text-slate-900 w-full md:w-48 focus:border-orange-600 focus:ring-orange-600">
           <SelectValue placeholder="All Status" />
         </SelectTrigger>
-        <SelectContent className="bg-slate-700 border-slate-600">
+        <SelectContent className="bg-white border-slate-200">
           <SelectItem value="all">All Status</SelectItem>
           <SelectItem value="active">Active</SelectItem>
           <SelectItem value="suspended">Suspended</SelectItem>
@@ -68,7 +68,7 @@ export function OrganizationFilters({ onSearchChange, onPlanChange, onStatusChan
             setSearch('');
             onSearchChange?.('');
           }}
-          className="border-slate-600 text-slate-300 hover:bg-slate-700"
+          className="border-slate-200 text-slate-700 hover:bg-slate-100"
         >
           <X className="w-4 h-4 mr-2" />
           Clear

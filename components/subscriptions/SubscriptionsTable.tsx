@@ -17,39 +17,39 @@ interface SubscriptionsTableProps {
 export function SubscriptionsTable({ subscriptions, onUpdateSeats, onCancel }: SubscriptionsTableProps) {
   const router = useRouter();
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-800/50 overflow-x-auto">
+    <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto shadow-sm">
       <Table>
         <TableHeader>
-          <TableRow className="border-slate-700 hover:bg-transparent">
-            <TableHead className="text-slate-400">Organization</TableHead>
-            <TableHead className="text-slate-400">Type</TableHead>
-            <TableHead className="text-slate-400">Plan</TableHead>
-            <TableHead className="text-slate-400">Billing Status</TableHead>
-            <TableHead className="text-slate-400">Seats</TableHead>
-            <TableHead className="text-slate-400">Billing Cycle</TableHead>
-            <TableHead className="text-slate-400">Renewal Date</TableHead>
-            <TableHead className="text-slate-400">Status</TableHead>
-            <TableHead className="text-slate-400 text-right">Actions</TableHead>
+          <TableRow className="border-slate-200 hover:bg-transparent bg-slate-50">
+            <TableHead className="text-slate-700 font-semibold">Organization</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Type</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Plan</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Billing Status</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Seats</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Billing Cycle</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Renewal Date</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Status</TableHead>
+            <TableHead className="text-slate-700 font-semibold text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {subscriptions.map((sub) => {
             const billingConfig = BILLING_STATUS_CONFIG[sub.billingStatus];
             return (
-              <TableRow key={sub.id} className="border-slate-700 hover:bg-slate-700/30">
-                <TableCell className="font-medium text-white">{sub.organizationName}</TableCell>
-                <TableCell className="text-slate-300 capitalize text-sm">{sub.organizationType}</TableCell>
-                <TableCell className="text-slate-300 capitalize">{sub.currentPlan}</TableCell>
+              <TableRow key={sub.id} className="border-slate-200 hover:bg-slate-50">
+                <TableCell className="font-medium text-slate-900">{sub.organizationName}</TableCell>
+                <TableCell className="text-slate-700 capitalize text-sm">{sub.organizationType}</TableCell>
+                <TableCell className="text-slate-700 capitalize">{sub.currentPlan}</TableCell>
                 <TableCell>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${billingConfig.color}`}>
                     {billingConfig.label}
                   </span>
                 </TableCell>
-                <TableCell className="text-slate-300 text-sm">
+                <TableCell className="text-slate-700 text-sm">
                   {sub.seatsUsed}/{sub.seatsLimit}
                 </TableCell>
-                <TableCell className="text-slate-300 capitalize text-sm">{sub.billingCycle}</TableCell>
-                <TableCell className="text-slate-400 text-sm">{formatDate(sub.renewalDate)}</TableCell>
+                <TableCell className="text-slate-700 capitalize text-sm">{sub.billingCycle}</TableCell>
+                <TableCell className="text-slate-700 text-sm">{formatDate(sub.renewalDate)}</TableCell>
                 <TableCell>
                   <StatusBadge status={sub.status} />
                 </TableCell>

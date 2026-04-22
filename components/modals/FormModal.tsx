@@ -20,11 +20,11 @@ export function FormModal({
 }: FormModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-slate-700 bg-slate-900 max-w-md">
+      <DialogContent className="border-slate-200 bg-white shadow-lg max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-slate-100">{title}</DialogTitle>
+          <DialogTitle className="text-slate-900">{title}</DialogTitle>
           {description && (
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-slate-600">
               {description}
             </DialogDescription>
           )}

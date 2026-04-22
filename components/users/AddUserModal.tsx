@@ -55,7 +55,7 @@ export function AddUserModal({ open, onOpenChange, onSubmit }: AddUserModalProps
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="user-name" className="text-slate-300">
+          <Label htmlFor="user-name" className="text-slate-700">
             Full Name
           </Label>
           <Input
@@ -63,13 +63,13 @@ export function AddUserModal({ open, onOpenChange, onSubmit }: AddUserModalProps
             placeholder="John Doe"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
+            className="border-slate-200 bg-white text-slate-900 placeholder:text-slate-500"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="user-email" className="text-slate-300">
+          <Label htmlFor="user-email" className="text-slate-700">
             Email Address
           </Label>
           <Input
@@ -78,27 +78,27 @@ export function AddUserModal({ open, onOpenChange, onSubmit }: AddUserModalProps
             placeholder="john@example.com"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
+            className="border-slate-200 bg-white text-slate-900 placeholder:text-slate-500"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="user-role" className="text-slate-300">
+          <Label htmlFor="user-role" className="text-slate-700">
             Role
           </Label>
           <Select value={formData.role} onValueChange={(value: any) => setFormData({ ...formData, role: value })}>
-            <SelectTrigger className="border-slate-700 bg-slate-800 text-slate-100">
+            <SelectTrigger className="border-slate-200 bg-white text-slate-900">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="border-slate-700 bg-slate-800">
-              <SelectItem value="user" className="text-slate-100">
+            <SelectContent className="border-slate-200 bg-white">
+              <SelectItem value="user" className="text-slate-900">
                 User
               </SelectItem>
-              <SelectItem value="moderator" className="text-slate-100">
+              <SelectItem value="moderator" className="text-slate-900">
                 Moderator
               </SelectItem>
-              <SelectItem value="admin" className="text-slate-100">
+              <SelectItem value="admin" className="text-slate-900">
                 Admin
               </SelectItem>
             </SelectContent>
@@ -110,14 +110,14 @@ export function AddUserModal({ open, onOpenChange, onSubmit }: AddUserModalProps
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-slate-700 text-slate-300 hover:bg-slate-700"
+            className="border-slate-700 text-slate-700 hover:bg-slate-100"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isLoading || !formData.name || !formData.email}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-orange-600 hover:bg-orange-700 text-white"
           >
             {isLoading ? 'Creating...' : 'Create User'}
           </Button>

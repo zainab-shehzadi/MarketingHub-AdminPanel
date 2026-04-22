@@ -11,19 +11,19 @@ interface KPICardProps {
 
 function KPICard({ icon, label, value, change, positive }: KPICardProps) {
   return (
-    <Card className="border-slate-700 bg-slate-800">
+    <Card className="border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div className="space-y-2">
-            <p className="text-sm font-medium text-slate-400">{label}</p>
-            <p className="text-3xl font-bold text-white">{value}</p>
+            <p className="text-sm font-medium text-slate-600">{label}</p>
+            <p className="text-3xl font-bold text-slate-900">{value}</p>
             {change && (
-              <p className={`text-xs ${positive ? 'text-green-400' : 'text-red-400'}`}>
+              <p className={`text-xs ${positive ? 'text-green-600' : 'text-red-600'}`}>
                 {positive ? '+' : ''}{change} from last month
               </p>
             )}
           </div>
-          <div className="p-2 bg-slate-700/50 rounded-lg text-slate-400">{icon}</div>
+          <div className="p-2 bg-orange-100 rounded-lg text-orange-600">{icon}</div>
         </div>
       </CardContent>
     </Card>

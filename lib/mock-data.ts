@@ -18,7 +18,6 @@ export const mockUsers: User[] = [
     lastLogin: new Date('2024-04-18'),
   },
 ];
-
 export const mockBrands: Brand[] = [
   {
     id: 'brand-1',
@@ -26,7 +25,7 @@ export const mockBrands: Brand[] = [
     website: 'techflow.io',
     ownerEmail: 'owner1@techflow.io',
     plan: 'professional',
-    status: 'active',
+    status: 'unbanned',
     visibility: 'public',
     seatsUsed: 8,
     seatsLimit: 10,
@@ -38,7 +37,7 @@ export const mockBrands: Brand[] = [
     website: 'creativeminds.co',
     ownerEmail: 'contact@creativeminds.co',
     plan: 'starter',
-    status: 'active',
+    status: 'unbanned',
     visibility: 'private',
     seatsUsed: 3,
     seatsLimit: 5,
@@ -50,7 +49,7 @@ export const mockBrands: Brand[] = [
     website: 'enterprise-dynamics.com',
     ownerEmail: 'admin@enterprise-dynamics.com',
     plan: 'enterprise',
-    status: 'active',
+    status: 'unbanned',
     visibility: 'public',
     seatsUsed: 45,
     seatsLimit: 100,
@@ -62,7 +61,7 @@ export const mockBrands: Brand[] = [
     website: 'startuphub.dev',
     ownerEmail: 'team@startuphub.dev',
     plan: 'starter',
-    status: 'suspended',
+    status: 'banned',
     visibility: 'private',
     seatsUsed: 2,
     seatsLimit: 5,
@@ -70,6 +69,33 @@ export const mockBrands: Brand[] = [
   },
 ];
 
+export const mockBrandAuditHistory: Record<
+  string,
+  { id: string; date: string; status: 'passed' | 'failed'; issuesFound: number; score: number }[]
+> = {
+  'brand-1': [
+    { id: 'a1', date: '2025-02-10', status: 'passed', issuesFound: 0, score: 85.4 },
+    { id: 'a2', date: '2025-02-08', status: 'passed', issuesFound: 2, score: 84.1 },
+    { id: 'a3', date: '2025-02-05', status: 'passed', issuesFound: 1, score: 83.8 },
+    { id: 'a4', date: '2025-01-28', status: 'failed', issuesFound: 5, score: 78.2 },
+    { id: 'a5', date: '2025-01-20', status: 'passed', issuesFound: 3, score: 80.5 },
+    { id: 'a6', date: '2025-01-15', status: 'passed', issuesFound: 0, score: 79.9 },
+  ],
+};
+
+export const mockBrandScoreTrends: Record<
+  string,
+  { id: string; month: string; score: number; change?: number }[]
+> = {
+  'brand-1': [
+    { id: 's1', month: 'Sep 2024', score: 68.2 },
+    { id: 's2', month: 'Oct 2024', score: 70.5, change: 2.3 },
+    { id: 's3', month: 'Nov 2024', score: 72.9, change: 2.4 },
+    { id: 's4', month: 'Dec 2024', score: 74.1, change: 1.2 },
+    { id: 's5', month: 'Jan 2025', score: 82.7, change: 8.6 },
+    { id: 's6', month: 'Feb 2025', score: 85.4, change: 2.7 },
+  ],
+};
 export const mockAgencies: Agency[] = [
   {
     id: 'agency-1',
@@ -83,12 +109,12 @@ export const mockAgencies: Agency[] = [
     createdAt: new Date('2023-05-10'),
     brands: [
       {
-        id: 'agency-1-brand-1',
+        id: 'brand-1',
         name: 'Agency Brand A',
         website: 'agency-brand-a.com',
         ownerEmail: 'owner@agency-brand-a.com',
         plan: 'professional',
-        status: 'active',
+        status: 'unbanned',
         visibility: 'public',
         agencyId: 'agency-1',
         seatsUsed: 5,
@@ -96,12 +122,12 @@ export const mockAgencies: Agency[] = [
         createdAt: new Date('2023-06-15'),
       },
       {
-        id: 'agency-1-brand-2',
+        id: 'brand-2',
         name: 'Agency Brand B',
         website: 'agency-brand-b.com',
         ownerEmail: 'owner@agency-brand-b.com',
         plan: 'starter',
-        status: 'active',
+        status: 'banned',
         visibility: 'private',
         agencyId: 'agency-1',
         seatsUsed: 3,

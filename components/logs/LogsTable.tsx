@@ -13,18 +13,18 @@ interface LogsTableProps {
 
 export function LogsTable({ logs, onView }: LogsTableProps) {
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-800/50 overflow-x-auto">
+    <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto shadow-sm">
       <Table>
         <TableHeader>
-          <TableRow className="border-slate-700 hover:bg-transparent">
-            <TableHead className="text-slate-400">Timestamp</TableHead>
-            <TableHead className="text-slate-400">Actor</TableHead>
-            <TableHead className="text-slate-400">Action</TableHead>
-            <TableHead className="text-slate-400">Module</TableHead>
-            <TableHead className="text-slate-400">Target Entity</TableHead>
-            <TableHead className="text-slate-400">Status</TableHead>
-            <TableHead className="text-slate-400">IP Address</TableHead>
-            <TableHead className="text-slate-400 text-right">Actions</TableHead>
+          <TableRow className="border-slate-200 hover:bg-transparent bg-slate-50">
+            <TableHead className="text-slate-700 font-semibold">Timestamp</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Actor</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Action</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Module</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Target Entity</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Status</TableHead>
+            <TableHead className="text-slate-700 font-semibold">IP Address</TableHead>
+            <TableHead className="text-slate-700 font-semibold text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -40,12 +40,12 @@ export function LogsTable({ logs, onView }: LogsTableProps) {
               warning: 'Warning',
             };
             return (
-              <TableRow key={log.id} className="border-slate-700 hover:bg-slate-700/30">
-                <TableCell className="text-slate-400 text-sm">{formatDateTime(log.timestamp)}</TableCell>
-                <TableCell className="text-slate-300 text-sm">{log.actor}</TableCell>
-                <TableCell className="text-slate-300 text-sm">{LOG_ACTION_CONFIG[log.action]}</TableCell>
-                <TableCell className="text-slate-300 text-sm">{LOG_MODULE_CONFIG[log.module]}</TableCell>
-                <TableCell className="text-slate-300 text-sm">
+              <TableRow key={log.id} className="border-slate-200 hover:bg-slate-50">
+                <TableCell className="text-slate-700 text-sm">{formatDateTime(log.timestamp)}</TableCell>
+                <TableCell className="text-slate-700 text-sm">{log.actor}</TableCell>
+                <TableCell className="text-slate-700 text-sm">{LOG_ACTION_CONFIG[log.action]}</TableCell>
+                <TableCell className="text-slate-700 text-sm">{LOG_MODULE_CONFIG[log.module]}</TableCell>
+                <TableCell className="text-slate-700 text-sm">
                   {log.targetEntity} <span className="text-slate-500">#{log.targetId}</span>
                 </TableCell>
                 <TableCell>
@@ -53,7 +53,7 @@ export function LogsTable({ logs, onView }: LogsTableProps) {
                     {statusLabels[log.status]}
                   </span>
                 </TableCell>
-                <TableCell className="text-slate-400 text-sm font-mono">{log.ipAddress}</TableCell>
+                <TableCell className="text-slate-700 text-sm font-mono">{log.ipAddress}</TableCell>
                 <TableCell className="text-right">
                   <ActionDropdown
                     actions={[

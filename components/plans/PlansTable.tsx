@@ -14,30 +14,30 @@ interface PlansTableProps {
 
 export function PlansTable({ plans, onEdit, onDelete }: PlansTableProps) {
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-800/50 overflow-x-auto">
+    <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto shadow-sm">
       <Table>
         <TableHeader>
-          <TableRow className="border-slate-700 hover:bg-transparent">
-            <TableHead className="text-slate-400">Plan Name</TableHead>
-            <TableHead className="text-slate-400">Monthly Price</TableHead>
-            <TableHead className="text-slate-400">Yearly Price</TableHead>
-            <TableHead className="text-slate-400">Features Count</TableHead>
-            <TableHead className="text-slate-400">Status</TableHead>
-            <TableHead className="text-slate-400">Created</TableHead>
-            <TableHead className="text-slate-400 text-right">Actions</TableHead>
+          <TableRow className="border-slate-200 hover:bg-transparent bg-slate-50">
+            <TableHead className="text-slate-700 font-semibold">Plan Name</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Monthly Price</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Yearly Price</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Features Count</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Status</TableHead>
+            <TableHead className="text-slate-700 font-semibold">Created</TableHead>
+            <TableHead className="text-slate-700 font-semibold text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {plans.map((plan) => (
-            <TableRow key={plan.id} className="border-slate-700 hover:bg-slate-700/30">
-              <TableCell className="font-medium text-white capitalize">{plan.name}</TableCell>
-              <TableCell className="text-slate-300">{formatCurrency(plan.monthlyPrice)}</TableCell>
-              <TableCell className="text-slate-300">{formatCurrency(plan.yearlyPrice)}</TableCell>
-              <TableCell className="text-slate-300">{plan.features.length} features</TableCell>
+            <TableRow key={plan.id} className="border-slate-200 hover:bg-slate-50">
+              <TableCell className="font-medium text-slate-900 capitalize">{plan.name}</TableCell>
+              <TableCell className="text-slate-700">{formatCurrency(plan.monthlyPrice)}</TableCell>
+              <TableCell className="text-slate-700">{formatCurrency(plan.yearlyPrice)}</TableCell>
+              <TableCell className="text-slate-700">{plan.features.length} features</TableCell>
               <TableCell>
                 <StatusBadge status={plan.status === 'available' ? 'active' : 'inactive'} />
               </TableCell>
-              <TableCell className="text-slate-400 text-sm">{formatDate(plan.createdAt)}</TableCell>
+              <TableCell className="text-slate-700 text-sm">{formatDate(plan.createdAt)}</TableCell>
               <TableCell className="text-right">
                 <ActionDropdown
                   actions={[

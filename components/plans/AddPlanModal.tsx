@@ -65,7 +65,7 @@ export function AddPlanModal({ open, onOpenChange, onSubmit }: AddPlanModalProps
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="plan-name" className="text-slate-300">
+          <Label htmlFor="plan-name" className="text-slate-700">
             Plan Name
           </Label>
           <Input
@@ -73,13 +73,13 @@ export function AddPlanModal({ open, onOpenChange, onSubmit }: AddPlanModalProps
             placeholder="e.g., Professional"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
+            className="border-slate-200 bg-white text-slate-900 placeholder:text-slate-500"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="plan-desc" className="text-slate-300">
+          <Label htmlFor="plan-desc" className="text-slate-700">
             Description
           </Label>
           <Input
@@ -87,14 +87,14 @@ export function AddPlanModal({ open, onOpenChange, onSubmit }: AddPlanModalProps
             placeholder="Plan description"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500"
+            className="border-slate-200 bg-white text-slate-900 placeholder:text-slate-500"
             required
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="plan-price" className="text-slate-300">
+            <Label htmlFor="plan-price" className="text-slate-700">
               Monthly Price ($)
             </Label>
             <Input
@@ -104,13 +104,13 @@ export function AddPlanModal({ open, onOpenChange, onSubmit }: AddPlanModalProps
               step="0.01"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-              className="border-slate-700 bg-slate-800 text-slate-100"
+              className="border-slate-200 bg-white text-slate-900"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="max-users" className="text-slate-300">
+            <Label htmlFor="max-users" className="text-slate-700">
               Max Users
             </Label>
             <Input
@@ -119,14 +119,14 @@ export function AddPlanModal({ open, onOpenChange, onSubmit }: AddPlanModalProps
               min="1"
               value={formData.maxUsers}
               onChange={(e) => setFormData({ ...formData, maxUsers: parseInt(e.target.value, 10) })}
-              className="border-slate-700 bg-slate-800 text-slate-100"
+              className="border-slate-200 bg-white text-slate-900"
               required
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="max-brands" className="text-slate-300">
+          <Label htmlFor="max-brands" className="text-slate-700">
             Max Brands
           </Label>
           <Input
@@ -135,7 +135,7 @@ export function AddPlanModal({ open, onOpenChange, onSubmit }: AddPlanModalProps
             min="1"
             value={formData.maxBrands}
             onChange={(e) => setFormData({ ...formData, maxBrands: parseInt(e.target.value, 10) })}
-            className="border-slate-700 bg-slate-800 text-slate-100"
+            className="border-slate-200 bg-white text-slate-900"
             required
           />
         </div>
@@ -145,14 +145,14 @@ export function AddPlanModal({ open, onOpenChange, onSubmit }: AddPlanModalProps
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-slate-700 text-slate-300 hover:bg-slate-700"
+            className="border-slate-700 text-slate-700 hover:bg-slate-100"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isLoading || !formData.name}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-orange-600 hover:bg-orange-700 text-white"
           >
             {isLoading ? 'Creating...' : 'Create Plan'}
           </Button>

@@ -66,31 +66,31 @@ export function EditBrandModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="edit-brand-name" className="text-slate-300">
+          <Label htmlFor="edit-brand-name" className="text-slate-700">
             Brand Name
           </Label>
           <Input
             id="edit-brand-name"
             value={formData.name || ''}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="border-slate-700 bg-slate-800 text-slate-100"
+            className="border-slate-200 bg-white text-slate-900 focus:border-orange-600 focus:ring-orange-600"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="edit-website" className="text-slate-300">
+          <Label htmlFor="edit-website" className="text-slate-700">
             Website
           </Label>
           <Input
             id="edit-website"
             value={formData.website || ''}
             onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-            className="border-slate-700 bg-slate-800 text-slate-100"
+            className="border-slate-200 bg-white text-slate-900 focus:border-orange-600 focus:ring-orange-600"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="edit-owner-email" className="text-slate-300">
+          <Label htmlFor="edit-owner-email" className="text-slate-700">
             Owner Email
           </Label>
           <Input
@@ -98,26 +98,26 @@ export function EditBrandModal({
             type="email"
             value={formData.ownerEmail || ''}
             onChange={(e) => setFormData({ ...formData, ownerEmail: e.target.value })}
-            className="border-slate-700 bg-slate-800 text-slate-100"
+            className="border-slate-200 bg-white text-slate-900 focus:border-orange-600 focus:ring-orange-600"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="edit-plan" className="text-slate-300">
+          <Label htmlFor="edit-plan" className="text-slate-700">
             Plan
           </Label>
           <Select value={formData.plan || 'starter'} onValueChange={(value: any) => setFormData({ ...formData, plan: value })}>
-            <SelectTrigger className="border-slate-700 bg-slate-800 text-slate-100">
+            <SelectTrigger className="border-slate-200 bg-white text-slate-900 focus:border-orange-600 focus:ring-orange-600">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="border-slate-700 bg-slate-800">
-              <SelectItem value="starter" className="text-slate-100">
+            <SelectContent className="border-slate-200 bg-white">
+              <SelectItem value="starter" className="text-slate-900">
                 Starter
               </SelectItem>
-              <SelectItem value="professional" className="text-slate-100">
+              <SelectItem value="professional" className="text-slate-900">
                 Professional
               </SelectItem>
-              <SelectItem value="enterprise" className="text-slate-100">
+              <SelectItem value="enterprise" className="text-slate-900">
                 Enterprise
               </SelectItem>
             </SelectContent>
@@ -125,18 +125,18 @@ export function EditBrandModal({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="edit-visibility" className="text-slate-300">
+          <Label htmlFor="edit-visibility" className="text-slate-700">
             Visibility
           </Label>
           <Select value={formData.visibility || 'public'} onValueChange={(value: any) => setFormData({ ...formData, visibility: value })}>
-            <SelectTrigger className="border-slate-700 bg-slate-800 text-slate-100">
+            <SelectTrigger className="border-slate-200 bg-white text-slate-900 focus:border-orange-600 focus:ring-orange-600">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="border-slate-700 bg-slate-800">
-              <SelectItem value="public" className="text-slate-100">
+            <SelectContent className="border-slate-200 bg-white">
+              <SelectItem value="public" className="text-slate-900">
                 Public
               </SelectItem>
-              <SelectItem value="private" className="text-slate-100">
+              <SelectItem value="private" className="text-slate-900">
                 Private
               </SelectItem>
             </SelectContent>
@@ -148,14 +148,14 @@ export function EditBrandModal({
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-slate-700 text-slate-300 hover:bg-slate-700"
+            className="border-slate-200 text-slate-700 hover:bg-slate-100"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isLoading}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-orange-600 hover:bg-orange-700 text-white"
           >
             {isLoading ? 'Saving...' : 'Save Changes'}
           </Button>

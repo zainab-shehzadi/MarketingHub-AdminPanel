@@ -28,14 +28,37 @@ export const USER_ROLES = {
   support: 'Support Agent',
 };
 
+
 export const STATUS_CONFIG = {
-  active: { label: 'Active', color: 'bg-green-100 text-green-800', dotColor: 'bg-green-500' },
-  suspended: { label: 'Suspended', color: 'bg-red-100 text-red-800', dotColor: 'bg-red-500' },
-  inactive: { label: 'Inactive', color: 'bg-gray-100 text-gray-800', dotColor: 'bg-gray-500' },
+  active: {
+    label: 'Active',
+    color: 'bg-emerald-100 text-emerald-700',
+    dotColor: 'bg-emerald-500',
+  },
   expired: { label: 'Expired', color: 'bg-orange-100 text-orange-800', dotColor: 'bg-orange-500' },
   cancelled: { label: 'Cancelled', color: 'bg-slate-100 text-slate-800', dotColor: 'bg-slate-500' },
   past_due: { label: 'Past Due', color: 'bg-red-100 text-red-800', dotColor: 'bg-red-500' },
-};
+  inactive: {
+    label: 'Inactive',
+    color: 'bg-slate-100 text-slate-700',
+    dotColor: 'bg-slate-400',
+  },
+  suspended: {
+    label: 'Suspended',
+    color: 'bg-amber-100 text-amber-700',
+    dotColor: 'bg-amber-500',
+  },
+  banned: {
+    label: 'Banned',
+    color: 'bg-red-100 text-red-700',
+    dotColor: 'bg-red-500',
+  },
+  unbanned: {
+    label: 'Unbanned',
+    color: 'bg-emerald-100 text-emerald-700',
+    dotColor: 'bg-emerald-500',
+  },
+} as const;
 
 export const BILLING_STATUS_CONFIG = {
   active: { label: 'Active', color: 'bg-green-100 text-green-800' },
@@ -72,4 +95,9 @@ export const SIDEBAR_ROUTES = [
   { icon: 'CreditCard', label: 'Plans', href: '/plans', roles: ['admin'] },
   { icon: 'Zap', label: 'Subscriptions', href: '/subscriptions', roles: ['admin', 'moderator'] },
   { icon: 'FileText', label: 'Logs', href: '/logs', roles: ['admin', 'moderator', 'support'] },
+];
+
+export const FOOTER_LINKS = [
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms & Conditions', href: '/terms' },
 ];

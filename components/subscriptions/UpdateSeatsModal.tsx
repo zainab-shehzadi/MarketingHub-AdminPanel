@@ -53,7 +53,7 @@ export function UpdateSeatsModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="seats" className="text-slate-300">
+          <Label htmlFor="seats" className="text-slate-700">
             New Seat Limit
           </Label>
           <Input
@@ -63,7 +63,7 @@ export function UpdateSeatsModal({
             max="1000"
             value={seatsValue}
             onChange={(e) => setSeatsValue(e.target.value)}
-            className="border-slate-700 bg-slate-800 text-slate-100"
+            className="border-slate-200 bg-white text-slate-900"
             required
           />
           <p className="text-xs text-slate-400">
@@ -76,14 +76,14 @@ export function UpdateSeatsModal({
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-slate-700 text-slate-300 hover:bg-slate-700"
+            className="border-slate-700 text-slate-700 hover:bg-slate-100"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isLoading}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-orange-600 hover:bg-orange-700 text-white"
           >
             {isLoading ? 'Updating...' : 'Update Seats'}
           </Button>

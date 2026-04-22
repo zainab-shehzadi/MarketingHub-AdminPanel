@@ -2,47 +2,66 @@
 
 import { useRouter } from 'next/navigation';
 import { Brand } from '@/lib/types';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { StatusBadge } from '@/components/shared/StatusBadge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { PlanBadge } from '@/components/shared/PlanBadge';
 import { ActionDropdown } from '@/components/modals/ActionDropdown';
+import { BanToggle } from './BanToggle';
 
 interface BrandsTableProps {
   brands: Brand[];
   onEdit?: (brand: Brand) => void;
   onDelete?: (id: string) => void;
+  onToggleBan?: (id: string) => void;
 }
 
-export function BrandsTable({ brands, onEdit, onDelete }: BrandsTableProps) {
+export function BrandsTable({
+  brands,
+  onEdit,
+  onDelete,
+  onToggleBan,
+}: BrandsTableProps) {
   const router = useRouter();
 
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-800/50 overflow-x-auto">
+    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
       <Table>
         <TableHeader>
-          <TableRow className="border-slate-700 hover:bg-transparent">
-            <TableHead className="text-slate-400">Name</TableHead>
-            <TableHead className="text-slate-400">Website</TableHead>
-            <TableHead className="text-slate-400">Owner Email</TableHead>
-            <TableHead className="text-slate-400">Plan</TableHead>
-            <TableHead className="text-slate-400">Status</TableHead>
-            <TableHead className="text-slate-400">Seats</TableHead>
-            <TableHead className="text-slate-400 text-right">Actions</TableHead>
+          <TableRow className="border-slate-200 bg-slate-50 hover:bg-transparent">
+            <TableHead className="font-semibold text-slate-700">Name</TableHead>
+            <TableHead className="font-semibold text-slate-700">Website</TableHead>
+            <TableHead className="font-semibold text-slate-700">Owner Email</TableHead>
+            <TableHead className="font-semibold text-slate-700">Plan</TableHead>
+            <TableHead className="font-semibold text-slate-700">Status</TableHead>
+            <TableHead className="font-semibold text-slate-700">Seats</TableHead>
+            <TableHead className="text-right font-semibold text-slate-700">
+              Actions
+            </TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {brands.map((brand) => (
-            <TableRow key={brand.id} className="border-slate-700 hover:bg-slate-700/30">
-              <TableCell className="font-medium text-white">{brand.name}</TableCell>
-              <TableCell className="text-slate-300">{brand.website}</TableCell>
-              <TableCell className="text-slate-400 text-sm">{brand.ownerEmail}</TableCell>
+            <TableRow key={brand.id} className="border-slate-200 hover:bg-slate-50">
+              <TableCell className="font-medium text-slate-900">{brand.name}</TableCell>
+              <TableCell className="text-slate-700">{brand.website}</TableCell>
+              <TableCell className="text-sm text-slate-600">{brand.ownerEmail}</TableCell>
               <TableCell>
                 <PlanBadge plan={brand.plan} />
               </TableCell>
               <TableCell>
-                <StatusBadge status={brand.status} />
+                <BanToggle
+                  status={brand.status}
+                  onToggle={() => onToggleBan?.(brand.id)}
+                />
               </TableCell>
-              <TableCell className="text-slate-300 text-sm">
+              <TableCell className="text-sm text-slate-700">
                 {brand.seatsUsed}/{brand.seatsLimit}
               </TableCell>
               <TableCell className="text-right">
@@ -57,6 +76,12 @@ export function BrandsTable({ brands, onEdit, onDelete }: BrandsTableProps) {
                       label: 'Edit',
                       icon: 'edit',
                       onClick: () => onEdit?.(brand),
+                    },
+                    {
+                      label: brand.status === 'banned' ? 'Unban Brand' : 'Ban Brand',
+                      icon: 'delete',
+                      isDangerous: brand.status !== 'banned',
+                      onClick: () => onToggleBan?.(brand.id),
                     },
                     {
                       label: 'Delete',

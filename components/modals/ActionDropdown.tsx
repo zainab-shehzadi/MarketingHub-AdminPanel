@@ -45,13 +45,13 @@ export function ActionDropdown({ actions }: ActionDropdownProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0 hover:bg-slate-700"
+          className="h-8 w-8 p-0 hover:bg-slate-100"
         >
-          <MoreHorizontal className="w-4 h-4 text-slate-400" />
+          <MoreHorizontal className="w-4 h-4 text-slate-600" />
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 border-slate-700 bg-slate-800">
+      <DropdownMenuContent align="end" className="w-56 border-slate-200 bg-white shadow-lg">
         {actions.map((action, index) => (
           <div key={index}>
             <DropdownMenuItem
@@ -59,15 +59,15 @@ export function ActionDropdown({ actions }: ActionDropdownProps) {
               disabled={action.disabled}
               className={`cursor-pointer ${
                 action.isDangerous
-                  ? 'text-red-400 focus:bg-red-900/50 focus:text-red-300'
-                  : 'text-slate-300 focus:bg-slate-700 focus:text-slate-100'
+                  ? 'text-red-600 focus:bg-red-50 focus:text-red-700'
+                  : 'text-slate-700 focus:bg-slate-100 focus:text-slate-900'
               }`}
             >
               {action.iconComponent || getIcon(action.icon)}
               <span className="ml-2">{action.label}</span>
             </DropdownMenuItem>
             {index < actions.length - 1 && (
-              <DropdownMenuSeparator className="bg-slate-700" />
+              <DropdownMenuSeparator className="bg-slate-200" />
             )}
           </div>
         ))}

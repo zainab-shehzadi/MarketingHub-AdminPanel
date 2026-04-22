@@ -17,20 +17,23 @@ export interface AuthSession {
   expiresAt: Date;
 }
 
-// Organization Types
+export type BrandStatus = 'banned' | 'unbanned';
+
 export interface Brand {
   id: string;
   name: string;
   website: string;
   ownerEmail: string;
-  plan: PlanName;
-  status: OrganizationStatus;
-  visibility: Visibility;
-  agencyId?: string;
+  plan: 'free' | 'starter' | 'professional' | 'enterprise';
+  status: BrandStatus;
+  visibility: 'public' | 'private';
   seatsUsed: number;
   seatsLimit: number;
   createdAt: Date;
-  logo?: string;
+  agencyName?: string;
+  businessType?: string;
+  visibilityScore?: number;
+  deletedAt?: Date | null;
 }
 
 export interface Agency {

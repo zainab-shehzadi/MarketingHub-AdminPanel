@@ -59,29 +59,29 @@ export function ChangeRoleModal({
       description={`Update role for ${user.name}`}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="bg-slate-700/50 border border-slate-600 rounded p-3 flex gap-2">
-          <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-slate-300">
+        <div className="bg-amber-50 border border-amber-200 rounded p-3 flex gap-2">
+          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-amber-800">
             Changing roles will update user permissions immediately
           </p>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="change-role" className="text-slate-300">
+          <Label htmlFor="change-role" className="text-slate-700">
             New Role
           </Label>
           <Select value={newRole} onValueChange={setNewRole}>
-            <SelectTrigger className="border-slate-700 bg-slate-800 text-slate-100">
+            <SelectTrigger className="border-slate-200 bg-white text-slate-900">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="border-slate-700 bg-slate-800">
-              <SelectItem value="user" className="text-slate-100">
+            <SelectContent className="border-slate-200 bg-white">
+              <SelectItem value="user" className="text-slate-900">
                 User
               </SelectItem>
-              <SelectItem value="moderator" className="text-slate-100">
+              <SelectItem value="moderator" className="text-slate-900">
                 Moderator
               </SelectItem>
-              <SelectItem value="admin" className="text-slate-100">
+              <SelectItem value="admin" className="text-slate-900">
                 Admin
               </SelectItem>
             </SelectContent>
@@ -93,14 +93,14 @@ export function ChangeRoleModal({
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-slate-700 text-slate-300 hover:bg-slate-700"
+            className="border-slate-700 text-slate-700 hover:bg-slate-100"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isLoading || newRole === user.role}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-orange-600 hover:bg-orange-700 text-white"
           >
             {isLoading ? 'Updating...' : 'Update Role'}
           </Button>
