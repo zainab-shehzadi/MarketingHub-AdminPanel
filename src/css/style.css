@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import "tw-animate-css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #1f2a3d;
+    --card: #ffffff;
+    --card-foreground: #1f2a3d;
+    --popover: #ffffff;
+    --popover-foreground: #1f2a3d;
+    --primary: #de5a3f;
+    --primary-foreground: #ffffff;
+    --secondary: #242c2f;
+    --secondary-foreground: #ffffff;
+    --muted: #6b7280;
+    --muted-foreground: #4d586c;
+    --accent: #de5a3f;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #dde3eb;
+    --input: #f6f7f9;
+    --ring: #de5a3f;
+    --radius: 0.625rem;
+    --sidebar: #ffffff;
+    --sidebar-foreground: #4d586c;
+    --sidebar-primary: #de5a3f;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f6f7f9;
+    --sidebar-accent-foreground: #242c2f;
+    --sidebar-border: #dde3eb;
+    --sidebar-ring: #de5a3f;
+  }
+
+  .dark {
+    --background: #ffffff;
+    --foreground: #1f2a3d;
+    --card: #ffffff;
+    --card-foreground: #1f2a3d;
+    --popover: #ffffff;
+    --popover-foreground: #1f2a3d;
+    --primary: #de5a3f;
+    --primary-foreground: #ffffff;
+    --secondary: #242c2f;
+    --secondary-foreground: #ffffff;
+    --muted: #6b7280;
+    --muted-foreground: #4d586c;
+    --accent: #de5a3f;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #dde3eb;
+    --input: #f6f7f9;
+    --ring: #de5a3f;
+    --sidebar: #ffffff;
+    --sidebar-foreground: #4d586c;
+    --sidebar-primary: #de5a3f;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f6f7f9;
+    --sidebar-accent-foreground: #242c2f;
+    --sidebar-border: #dde3eb;
+    --sidebar-ring: #de5a3f;
+  }
+
+  /* html {
+    font-family: "Inter", sans-serif;
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-white text-slate-900;
+    font-family: "Inter", sans-serif;
+  } */
+}
