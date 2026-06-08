@@ -7,13 +7,14 @@ import {
   BadgeCheck,
   BriefcaseBusiness,
   Building2,
-  CalendarDays,
   Hash,
   Mail,
   ShieldCheck,
   User2,
   Users,
   CircleAlert,
+  FolderKanban,
+  Clock3,
 } from "lucide-react";
 
 import type { AdminUser, UserRole } from "@/types/user";
@@ -26,21 +27,6 @@ type UserDetailPageProps = {
   userId: string;
 };
 
-function formatDate(value?: string | Date | null) {
-  if (!value) return "Not available";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return "Not available";
-  }
-
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 function getRoleBadge(role?: UserRole | string) {
   switch (role?.toLowerCase()) {
@@ -80,23 +66,41 @@ function EmptyValue() {
 export function UserDetailPage({ userId }: UserDetailPageProps) {
   const router = useRouter();
 
-  const getUserById = useUserStore((state) => state.getUserById);
-  const [isLoading, setIsLoading] = useState(false);
+  const user = useUserStore((state) => {
+    const userFromList = state.users.find((item) => item._id === userId);
 
-  const user = useMemo(() => {
-    return getUserById(userId);
-  }, [getUserById, userId]);
+    if (userFromList) return userFromList;
 
-  const handleBack = () => {
-    router.push("/users");
-  };
+    if (state.selectedUser?._id === userId) return state.selectedUser;
 
+    if (typeof window !== "undefined") {
+      const storedUser = sessionStorage.getItem("selectedUser");
+
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser) as AdminUser;
+
+          if (parsedUser?._id === userId) {
+            return parsedUser;
+          }
+        } catch {
+          sessionStorage.removeItem("selectedUser");
+        }
+      }
+    }
+
+    return null;
+  });
 
   const blockUnblockUser = useUserStore((state) => state.blockUnblockUser);
   const isActionLoading = useUserStore((state) => state.isActionLoading);
 
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleBack = () => {
+    router.push("/users");
+  };
 
   const handleOpenBlockDialog = (userData: AdminUser) => {
     setSelectedUser(userData);
@@ -115,7 +119,6 @@ export function UserDetailPage({ userId }: UserDetailPageProps) {
       setSelectedUser(null);
     }
   };
-
 
   if (!user) {
     return (
@@ -147,6 +150,11 @@ export function UserDetailPage({ userId }: UserDetailPageProps) {
   const displayName = user.name || "User";
   const displayEmail = user.email || "";
   const roleBadgeClass = getRoleBadge(user.role);
+
+  const assignments = user.employment?.assignments ?? [];
+  const primaryBrand =
+    user.employment?.primaryBrand || assignments[0]?.organizationName;
+  const primaryWorkspace = assignments[0]?.workspace?.name;
 
   return (
     <>
@@ -183,8 +191,8 @@ export function UserDetailPage({ userId }: UserDetailPageProps) {
 
                     <span
                       className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${user.blocked
-                          ? "border-red-200 bg-red-50 text-red-700"
-                          : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                        ? "border-red-200 bg-red-50 text-red-700"
+                        : "border-emerald-200 bg-emerald-50 text-emerald-700"
                         }`}
                     >
                       {user.blocked ? "Blocked" : "Active"}
@@ -234,8 +242,8 @@ export function UserDetailPage({ userId }: UserDetailPageProps) {
                 onClick={() => handleOpenBlockDialog(user)}
                 disabled={isActionLoading}
                 className={`inline-flex h-11 w-full items-center justify-center rounded-xl px-5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto ${user.blocked
-                    ? "bg-emerald-600 hover:bg-emerald-700"
-                    : "bg-red-600 hover:bg-red-700"
+                  ? "bg-emerald-600 hover:bg-emerald-700"
+                  : "bg-red-600 hover:bg-red-700"
                   }`}
               >
                 {user.blocked ? "Unblock User" : "Block User"}
@@ -257,80 +265,122 @@ export function UserDetailPage({ userId }: UserDetailPageProps) {
             />
 
             <SummaryItem
-              label="Designation"
-              value={user.employeeDesignation || "N/A"}
-              icon={<BriefcaseBusiness className="h-5 w-5" />}
+              label="Employee Brand"
+              value={primaryBrand || "N/A"}
+              icon={<FolderKanban className="h-5 w-5" />}
             />
 
             <SummaryItem
-              label="Created"
-              value={formatDate(user.createdAt)}
-              icon={<CalendarDays className="h-5 w-5" />}
+              label="Employee Workspace"
+              value={primaryWorkspace || "N/A"}
+              icon={<Building2 className="h-5 w-5" />}
             />
           </div>
         </section>
 
-        <div className="grid gap-6 xl:grid-cols-2">
-          <DetailCard
-            title="Profile Information"
-            description="Basic account and contact details."
-            items={[
-              {
-                icon: <User2 className="h-4 w-4" />,
-                label: "Full Name",
-                value: displayName || <EmptyValue />,
-              },
-              {
-                icon: <Mail className="h-4 w-4" />,
-                label: "Email Address",
-                value: displayEmail ? (
-                  <span className="break-all normal-case">{displayEmail}</span>
-                ) : (
-                  <EmptyValue />
-                ),
-              },
-              {
-                icon: <ShieldCheck className="h-4 w-4" />,
-                label: "Role",
-                value: (
-                  <span
-                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold capitalize ${roleBadgeClass}`}
-                  >
-                    {user.role}
-                  </span>
-                ),
-              },
-              {
-                icon: <Hash className="h-4 w-4" />,
-                label: "User ID",
-                value: <span className="break-all normal-case">{user._id}</span>,
-              },
-            ]}
-          />
+     
 
-          <DetailCard
-            title="Organization Information"
-            description="User organization and employee details."
-            items={[
-              {
-                icon: <Building2 className="h-4 w-4" />,
-                label: "Organization Type",
-                value: user.organizationType || <EmptyValue />,
-              },
-              {
-                icon: <BriefcaseBusiness className="h-4 w-4" />,
-                label: "Employee Designation",
-                value: user.employeeDesignation || <EmptyValue />,
-              },
-              {
-                icon: <Users className="h-4 w-4" />,
-                label: "Account Type",
-                value: user.role || <EmptyValue />,
-              },
-            ]}
-          />
+          <div className="grid gap-6 xl:grid-cols-2">
+            <DetailCard
+              title="Profile Information"
+              description="Basic account and contact details."
+              items={[
+                {
+                  icon: <User2 className="h-4 w-4" />,
+                  label: "Full Name",
+                  value: displayName || <EmptyValue />,
+                },
+                {
+                  icon: <Mail className="h-4 w-4" />,
+                  label: "Email Address",
+                  value: displayEmail ? (
+                    <span className="break-all normal-case">{displayEmail}</span>
+                  ) : (
+                    <EmptyValue />
+                  ),
+                },
+                {
+                  icon: <ShieldCheck className="h-4 w-4" />,
+                  label: "Role",
+                  value: (
+                    <span
+                      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold capitalize ${roleBadgeClass}`}
+                    >
+                      {user.role}
+                    </span>
+                  ),
+                },
+                {
+                  icon: <Hash className="h-4 w-4" />,
+                  label: "User ID",
+                  value: <span className="break-all normal-case">{user._id}</span>,
+                },
+              ]}
+            />
+
+            <DetailCard
+              title="Organization Information"
+              description="User organization and employee details."
+              items={[
+                {
+                  icon: <Building2 className="h-4 w-4" />,
+                  label: "Organization Type",
+                  value: user.organizationType || <EmptyValue />,
+                },
+                {
+                  icon: <BriefcaseBusiness className="h-4 w-4" />,
+                  label: "Employee Designation",
+                  value: user.employeeDesignation || <EmptyValue />,
+                },
+                {
+                  icon: <Users className="h-4 w-4" />,
+                  label: "Account Type",
+                  value: user.role || <EmptyValue />,
+                },
+              ]}
+            />
+
+            <DetailCard
+              title="Employee Brand & Workspace"
+              description="Assigned brand, workspace, project, and capacity details."
+              items={[
+                {
+                  icon: <FolderKanban className="h-4 w-4" />,
+                  label: "Primary Brand",
+                  value: primaryBrand || <EmptyValue />,
+                },
+                {
+                  icon: <Building2 className="h-4 w-4" />,
+                  label: "Workspace",
+                  value: primaryWorkspace || <EmptyValue />,
+                },
+                {
+                  icon: <BriefcaseBusiness className="h-4 w-4" />,
+                  label: "Position",
+                  value: assignments[0]?.position || <EmptyValue />,
+                },
+                {
+                  icon: <Clock3 className="h-4 w-4" />,
+                  label: "Weekly Hours",
+                  value:
+                    assignments[0]?.weeklyHoursAvailable !== undefined
+                      ? `${assignments[0].weeklyHoursAvailable} hours`
+                      : <EmptyValue />,
+                },
+                {
+                  icon: <ShieldCheck className="h-4 w-4" />,
+                  label: "Workspace Type",
+                  value: assignments[0]?.workspace?.workspaceType || <EmptyValue />,
+                },
+                {
+                  icon: <BadgeCheck className="h-4 w-4" />,
+                  label: "Workspace Status",
+                  value: assignments[0]?.workspace?.status || <EmptyValue />,
+                },
+              ]}
+            />
+          </div>
         </div>
-      </div>
 
       <ConfirmationDialog
         open={confirmOpen}

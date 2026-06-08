@@ -1,270 +1,229 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import { PageHeader } from '@/components/shared/PageHeader';
-import { BrandsTable } from '@/components/organizations/BrandsTable';
-import { AgenciesAccordion } from '@/components/organizations/AgenciesAccordion';
-import { OrganizationFilters } from '@/components/organizations/OrganizationFilters';
-import { AddBrandModal } from '@/components/organizations/AddBrandModal';
-import { EditBrandModal } from '@/components/organizations/EditBrandModal';
-import { Pagination } from '@/components/shared/Pagination';
-import { useBrands } from '@/lib/hooks/useDataManagement';
-import { mockBrands, mockAgencies } from '@/lib/mock-data';
-import { Brand, Agency } from '@/lib/types';
-import { ConfirmationDialog } from '@/components/modals/ConfirmationDialog';
-import { useWorkspaceStore } from '@/store/workspace.store';
+import { useEffect, useMemo, useState } from "react";
+import {
+  BriefcaseBusiness,
+  Building2,
+  FolderKanban,
+  Search,
+  Users,
+} from "lucide-react";
+
+import { PageHeader } from "@/components/shared/PageHeader";
+import { AgenciesAccordion } from "@/components/organizations/AgenciesAccordion";
+import { Pagination } from "@/components/shared/Pagination";
+import { useWorkspaceStore } from "@/store/workspace.store";
+import type { WorkspaceType } from "@/types/workspace";
 
 const ITEMS_PER_PAGE = 10;
 
-type OrganizationTab = 'brands' | 'agencies';
+type OrganizationTab = "brands" | "agencies";
+type WorkspaceStatusFilter = "all" | "active" | "archived";
+
+function getWorkspaceTypeByTab(tab: OrganizationTab): WorkspaceType {
+  return tab === "brands" ? "brand" : "agency";
+}
+
 export default function OrganizationsPage() {
-  const [activeTab, setActiveTab] = useState<OrganizationTab>('brands');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPlan, setSelectedPlan] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [activeTab, setActiveTab] = useState<OrganizationTab>("agencies");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] =
+    useState<WorkspaceStatusFilter>("all");
+  const [page, setPage] = useState(1);
 
-  const brandsManager = useBrands(mockBrands);
-  const {
-    workspaces,
-    pagination,
-    isLoading,
-    getWorkspaces,
-  } = useWorkspaceStore();
-  const [brandPage, setBrandPage] = useState(1);
-  const [agencyPage, setAgencyPage] = useState(1);
+  const { workspaces, pagination, isLoading, error, getWorkspaces } =
+    useWorkspaceStore();
 
-  const [addBrandModalOpen, setAddBrandModalOpen] = useState(false);
-  const [editBrandModalOpen, setEditBrandModalOpen] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [brandToDelete, setBrandToDelete] = useState<string | null>(null);
+  const currentWorkspaceType = useMemo(() => {
+    return getWorkspaceTypeByTab(activeTab);
+  }, [activeTab]);
+
   useEffect(() => {
-    if (activeTab !== 'agencies') return;
-
     getWorkspaces({
-      page: agencyPage,
+      page,
       limit: ITEMS_PER_PAGE,
-      status: selectedStatus !== 'all' ? selectedStatus : undefined,
-      search: searchTerm || undefined,
+      type: currentWorkspaceType,
+      status: selectedStatus !== "all" ? selectedStatus : undefined,
+      q: searchTerm.trim() || undefined,
     });
-  }, [activeTab, agencyPage, selectedStatus, searchTerm, getWorkspaces]);
-  const filteredBrands = useMemo(() => {
-    let result = brandsManager.data;
+  }, [page, currentWorkspaceType, selectedStatus, searchTerm, getWorkspaces]);
 
-    if (searchTerm) {
-      const query = searchTerm.toLowerCase();
-      result = result.filter(
-        (brand) =>
-          brand.name.toLowerCase().includes(query) ||
-          brand.ownerEmail.toLowerCase().includes(query)
-      );
-    }
-
-    if (selectedPlan !== 'all') {
-      result = result.filter((brand) => brand.plan === selectedPlan);
-    }
-
-    if (selectedStatus !== 'all') {
-      result = result.filter((brand) => brand.status === selectedStatus);
-    }
-
-    return result;
-  }, [brandsManager.data, searchTerm, selectedPlan, selectedStatus]);
-
-  const filteredWorkspaces = useMemo(() => {
-    return workspaces ?? [];
-  }, [workspaces]);
-
-  const totalWorkspacePages = pagination?.totalPages ?? 1;
-  const paginatedWorkspaces = filteredWorkspaces;
-  const totalBrandPages = Math.ceil(filteredBrands.length / ITEMS_PER_PAGE);
-  const paginatedBrands = filteredBrands.slice(
-    (brandPage - 1) * ITEMS_PER_PAGE,
-    brandPage * ITEMS_PER_PAGE
-  );
   useEffect(() => {
-    setAgencyPage(1);
-  }, [searchTerm, selectedStatus]);
-  const pageTitle = useMemo(() => {
-    return activeTab === 'brands' ? 'Brand History' : 'Managed Agencies';
-  }, [activeTab]);
+    setPage(1);
+  }, [activeTab, searchTerm, selectedStatus]);
 
-  const pageDescription = useMemo(() => {
-    return activeTab === 'brands'
-      ? 'View and manage all registered brands.'
-      : 'View agencies and the brands managed under them.';
-  }, [activeTab]);
+  const workspaceStats = useMemo(() => {
+    const activeWorkspaces = workspaces.filter(
+      (workspace) => workspace.status?.toLowerCase() === "active"
+    ).length;
 
-  const handleAddBrand = (data: any) => {
-    const newBrand: Omit<Brand, 'id'> = {
-      name: data.name,
-      website: data.website,
-      ownerEmail: data.ownerEmail,
-      plan: data.plan,
-      status: 'banned',
-      visibility: 'public',
-      seatsUsed: 0,
-      seatsLimit: Number.parseInt(data.seatsLimit, 10),
-      createdAt: new Date(),
+    const totalMembers = workspaces.reduce((total, workspace) => {
+      return total + (workspace.members?.length ?? 0);
+    }, 0);
+
+    const totalProjects = workspaces.reduce((total, workspace) => {
+      return (
+        total + (workspace.projectCount ?? workspace.projects?.length ?? 0)
+      );
+    }, 0);
+
+    return {
+      totalWorkspaces: pagination?.total ?? workspaces.length,
+      activeWorkspaces,
+      totalMembers,
+      totalProjects,
     };
+  }, [workspaces, pagination?.total]);
 
-    brandsManager.add(newBrand);
-    setAddBrandModalOpen(false);
-    setBrandPage(1);
-  };
-  const handleEditBrand = (brand: Brand) => {
-    setSelectedBrand(brand);
-    setEditBrandModalOpen(true);
-  };
+  const totalPages = pagination?.totalPages ?? 1;
 
-  const handleSaveEditBrand = (id: string, data: any) => {
-    brandsManager.update(id, {
-      name: data.name,
-      website: data.website,
-      ownerEmail: data.ownerEmail,
-      plan: data.plan,
-    });
-
-    setEditBrandModalOpen(false);
-    setSelectedBrand(null);
-  };
-
-  const handleDeleteBrand = (id: string) => {
-    setBrandToDelete(id);
-    setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    if (!brandToDelete) return;
-
-    brandsManager.remove(brandToDelete);
-    setDeleteDialogOpen(false);
-    setBrandToDelete(null);
-
-    if (paginatedBrands.length === 1 && brandPage > 1) {
-      setBrandPage((prev) => prev - 1);
-    }
-  };
-
-
-  const handleToggleBrandBan = (id: string) => {
-    const brand = brandsManager.data.find((item) => item.id === id);
-    if (!brand) return;
-
-    brandsManager.update(id, {
-      status: brand.status === 'banned' ? 'unbanned' : 'banned',
-    });
-  };
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Organizations"
-        description="Manage brands and agencies on your platform"
-
+        description="Manage brand and agency workspaces, members, projects, seats, and account status from one place."
       />
 
-      <OrganizationFilters
-        onSearchChange={setSearchTerm}
-        onPlanChange={setSelectedPlan}
-        onStatusChange={setSelectedStatus}
-      />
+      <div className="flex justify-center">
+        <div className="inline-flex rounded-2xl border border-slate-200 bg-slate-100/80 p-1.5 shadow-sm">
+          <button
+            type="button"
+            onClick={() => setActiveTab("agencies")}
+            className={`min-w-[180px] rounded-xl px-5 py-3 text-sm font-semibold transition ${
+              activeTab === "agencies"
+                ? "bg-white text-[#DE5A3F] shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            Agencies
+          </button>
 
-      <div className="flex flex-col gap-6">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900">{pageTitle}</h2>
-          <p className="mt-1 text-sm text-slate-600">{pageDescription}</p>
+          <button
+            type="button"
+            onClick={() => setActiveTab("brands")}
+            className={`min-w-[180px] rounded-xl px-5 py-3 text-sm font-semibold transition ${
+              activeTab === "brands"
+                ? "bg-white text-[#DE5A3F] shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            Brands
+          </button>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <OrganizationStatCard
+          title={`Total ${activeTab === "brands" ? "Brands" : "Agencies"}`}
+          value={workspaceStats.totalWorkspaces}
+          subtitle={`All ${activeTab === "brands" ? "brand" : "agency"} workspaces`}
+          icon={<BriefcaseBusiness className="h-5 w-5" />}
+        />
+
+        <OrganizationStatCard
+          title="Active Workspaces"
+          value={workspaceStats.activeWorkspaces}
+          subtitle="Currently active accounts"
+          icon={<Building2 className="h-5 w-5" />}
+        />
+
+        <OrganizationStatCard
+          title="Total Members"
+          value={workspaceStats.totalMembers}
+          subtitle="Members across current page"
+          icon={<Users className="h-5 w-5" />}
+        />
+
+        <OrganizationStatCard
+          title="Projects"
+          value={workspaceStats.totalProjects}
+          subtitle="Projects across current page"
+          icon={<FolderKanban className="h-5 w-5" />}
+        />
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-[1fr_180px]">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder="Search workspace name or project organization name"
+            className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#DE5A3F] focus:ring-2 focus:ring-[#DE5A3F]/10"
+          />
         </div>
 
-        <div className="flex justify-center pt-2">
-          <div className="inline-flex rounded-2xl border border-slate-200 bg-slate-100/80 p-1.5 shadow-sm">
-            <button
-              type="button"
-              onClick={() => setActiveTab('brands')}
-              className={`min-w-[180px] rounded-xl px-5 py-3 text-sm font-semibold transition ${activeTab === 'brands'
-                ? 'bg-white text-[#DE5A3F] shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
-                }`}
-            >
-              Brands ({filteredBrands.length})
-            </button>
+        <select
+          value={selectedStatus}
+          onChange={(event) =>
+            setSelectedStatus(event.target.value as WorkspaceStatusFilter)
+          }
+          className="h-11 rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 outline-none transition focus:border-[#DE5A3F] focus:ring-2 focus:ring-[#DE5A3F]/10"
+        >
+          <option value="all">All Status</option>
+          <option value="active">Active</option>
+          <option value="archived">Archived</option>
+        </select>
+      </div>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('agencies')}
-              className={`min-w-[180px] rounded-xl px-5 py-3 text-sm font-semibold transition ${activeTab === 'agencies'
-                ? 'bg-white text-[#DE5A3F] shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
-                }`}
-            >
-              Workspaces ({pagination?.total ?? filteredWorkspaces.length})
-            </button>
-          </div>
+      {error ? (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          {error}
         </div>
+      ) : null}
 
-        {activeTab === 'brands' ? (
-          <div className="space-y-4">
-            <BrandsTable
-              brands={paginatedBrands}
-              onEdit={handleEditBrand}
-              onDelete={handleDeleteBrand}
-              onToggleBan={handleToggleBrandBan}
-            />
-
-            {totalBrandPages > 1 && (
-              <Pagination
-                onPageChange={setBrandPage}
-                pagination={pagination}
-                isLoading={isLoading}
-                itemLabel="brands"
-              />
-            )}
+      <div className="space-y-4">
+        {isLoading ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center text-sm text-slate-500 shadow-sm">
+            Loading {activeTab === "brands" ? "brands" : "agencies"}...
           </div>
         ) : (
-          <div className="space-y-4">
-            {isLoading ? (
-              <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center text-sm text-slate-500 shadow-sm">
-                Loading agencies...
-              </div>
-            ) : (
-              <>
-                <AgenciesAccordion agencies={paginatedWorkspaces} />
-                {totalWorkspacePages > 1 && (
-                  <Pagination
-                    pagination={pagination}
-                    isLoading={isLoading}
-                    itemLabel="workspaces"
-                    onPageChange={setAgencyPage}
-                  />
-                )}
-              </>
-            )}
-          </div>
+          <>
+            <AgenciesAccordion agencies={workspaces} />
+
+            {totalPages > 1 ? (
+              <Pagination
+                pagination={pagination}
+                isLoading={isLoading}
+                itemLabel={activeTab === "brands" ? "brands" : "agencies"}
+                onPageChange={setPage}
+              />
+            ) : null}
+          </>
         )}
       </div>
-      <AddBrandModal
-        open={addBrandModalOpen}
-        onOpenChange={setAddBrandModalOpen}
-        onSubmit={handleAddBrand}
-      />
+    </div>
+  );
+}
 
-      <EditBrandModal
-        open={editBrandModalOpen}
-        onOpenChange={setEditBrandModalOpen}
-        brand={selectedBrand}
-        onSubmit={handleSaveEditBrand}
-      />
+function OrganizationStatCard({
+  title,
+  value,
+  subtitle,
+  icon,
+}: {
+  title: string;
+  value: string | number;
+  subtitle: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-slate-500">{title}</p>
 
+          <p className="mt-3 text-2xl font-bold text-slate-950">{value}</p>
 
+          <p className="mt-4 text-xs text-slate-500">{subtitle}</p>
+        </div>
 
-      <ConfirmationDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        title="Delete Brand"
-        description="Are you sure you want to delete this brand? This action cannot be undone."
-        actionLabel="Delete"
-        isDangerous
-        onConfirm={confirmDelete}
-      />
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
+          {icon}
+        </div>
+      </div>
     </div>
   );
 }

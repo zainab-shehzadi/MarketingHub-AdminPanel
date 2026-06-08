@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import type { Plan } from "@/lib/types";
-import { CheckCircle2, X } from "lucide-react";
+import { useEffect, useMemo, useRef } from "react";
+import { CheckCircle2 } from "lucide-react";
+import type { PaymentCatalogPlan } from "@/types/payment.types";
 
 interface PlanFeaturesModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  plan: Plan | null;
+  plan: PaymentCatalogPlan | null;
 }
 
 export function PlanFeaturesModal({
@@ -16,6 +16,10 @@ export function PlanFeaturesModal({
   plan,
 }: PlanFeaturesModalProps) {
   const modalRef = useRef<HTMLDivElement | null>(null);
+
+  const features = useMemo(() => {
+    return plan?.entitlements?.features ?? [];
+  }, [plan]);
 
   useEffect(() => {
     if (!open) return;
@@ -48,7 +52,7 @@ export function PlanFeaturesModal({
   if (!open || !plan) return null;
 
   return (
-    <div className="fixed !mt-0 inset-0 z-[999] flex items-center justify-center bg-slate-950/55 px-4 py-4 backdrop-blur-sm">
+    <div className="fixed inset-0 !mt-0 z-[999] flex items-center justify-center bg-slate-950/55 px-4 py-4 backdrop-blur-sm">
       <button
         type="button"
         aria-label="Close modal"
@@ -65,24 +69,26 @@ export function PlanFeaturesModal({
             <h2 className="text-xl font-bold capitalize tracking-[-0.02em] text-slate-900 sm:text-2xl">
               {plan.name} Plan Features
             </h2>
+
             <p className="mt-1.5 text-sm leading-6 text-slate-500">
               Full feature list included in this subscription plan.
             </p>
           </div>
-
-        
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-6">
-          {plan.features.length > 0 ? (
+          {features.length > 0 ? (
             <div className="space-y-3">
-              {plan.features.map((feature, index) => (
+              {features.map((feature, index) => (
                 <div
                   key={`${feature}-${index}`}
                   className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700"
                 >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#DE5A3F]" />
-                  <span className="break-words">{feature}</span>
+
+                  <span className="break-words capitalize">
+                    {feature.replaceAll("_", " ")}
+                  </span>
                 </div>
               ))}
             </div>

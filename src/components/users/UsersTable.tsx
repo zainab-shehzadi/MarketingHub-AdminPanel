@@ -17,9 +17,6 @@ import { AdminUser } from '@/types/user';
 
 interface UsersTableProps {
   users: AdminUser[];
-  onChangeRole?: (user: AdminUser) => void;
-  onResetPassword?: (user: AdminUser) => void;
-  onDelete?: (id: string) => void;
 }
 
 function formatRole(role: string) {
@@ -31,7 +28,6 @@ function formatRole(role: string) {
 
 export function UsersTable({
   users,
-  onDelete,
 }: UsersTableProps) {
   const router = useRouter();
 
@@ -104,8 +100,8 @@ export function UsersTable({
                 </TableCell>
 
                 <TableCell>
-  <StatusBadge status={user.active ?? true} />
-</TableCell>
+                  <StatusBadge status={user.active ?? true} />
+                </TableCell>
 
                 <TableCell className="text-sm text-slate-700">
                   {user.createdAt ? formatDate(new Date(user.createdAt)) : '-'}
@@ -120,13 +116,8 @@ export function UsersTable({
                           icon: 'view',
                           onClick: () => router.push(`/users/${user._id}`),
                         },
+
                        
-                        {
-                          label: 'Delete',
-                          icon: 'delete',
-                          isDangerous: true,
-                          onClick: () => onDelete?.(user._id),
-                        },
                       ]}
                     />
                   </div>

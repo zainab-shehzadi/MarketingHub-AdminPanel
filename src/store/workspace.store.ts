@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { create } from 'zustand';
-import { workspaceService } from '@/services/workspace.service';
-import {
+import { create } from "zustand";
+import { workspaceService } from "@/services/workspace.service";
+import type {
   GetWorkspacesParams,
   Workspace,
   WorkspacePagination,
-} from '@/types/workspace';
+} from "@/types/workspace";
 
 type WorkspaceState = {
   workspaces: Workspace[];
@@ -35,13 +35,13 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
       const response = await workspaceService.getWorkspaces({
         page: params.page ?? 1,
         limit: params.limit ?? 20,
-        workspaceType: params.workspaceType,
+        type: params.type,
         status: params.status,
-        search: params.search,
+        q: params.q,
       });
 
       if (!response.success) {
-        throw new Error(response.message || 'Failed to fetch workspaces');
+        throw new Error(response.message || "Failed to fetch workspaces");
       }
 
       set({
@@ -58,7 +58,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
         error:
           error instanceof Error
             ? error.message
-            : 'Failed to fetch workspaces',
+            : "Failed to fetch workspaces",
       });
     }
   },
@@ -75,8 +75,8 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
       return selectedWorkspace;
     }
 
-    if (typeof window !== 'undefined') {
-      const storedWorkspace = sessionStorage.getItem('selectedWorkspace');
+    if (typeof window !== "undefined") {
+      const storedWorkspace = sessionStorage.getItem("selectedWorkspace");
 
       if (storedWorkspace) {
         try {
@@ -86,7 +86,7 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
             return parsedWorkspace;
           }
         } catch {
-          sessionStorage.removeItem('selectedWorkspace');
+          sessionStorage.removeItem("selectedWorkspace");
         }
       }
     }
@@ -95,11 +95,11 @@ export const useWorkspaceStore = create<WorkspaceState>((set, get) => ({
   },
 
   setSelectedWorkspace: (workspace) => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (workspace) {
-        sessionStorage.setItem('selectedWorkspace', JSON.stringify(workspace));
+        sessionStorage.setItem("selectedWorkspace", JSON.stringify(workspace));
       } else {
-        sessionStorage.removeItem('selectedWorkspace');
+        sessionStorage.removeItem("selectedWorkspace");
       }
     }
 

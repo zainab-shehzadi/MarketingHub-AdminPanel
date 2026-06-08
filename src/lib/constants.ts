@@ -123,9 +123,7 @@ export const SIDEBAR_ROUTES = [
   { icon: 'Building2', label: 'Organizations', href: '/organizations', roles: ['admin', 'moderator'] },
   { icon: 'Users', label: 'Users', href: '/users', roles: ['admin', 'moderator'] },
   { icon: 'CreditCard', label: 'Plans', href: '/plans', roles: ['admin'] },
-  { icon: 'Zap', label: 'Subscriptions', href: '/subscriptions', roles: ['admin', 'moderator'] },
-  // { icon: 'FileText', label: 'Logs', href: '/logs', roles: ['admin', 'moderator', 'support'] },
-    { icon: 'FileText', label: 'Workspaces', href: '/workspaces', roles: ['admin', 'moderator', 'support'] },
+  { icon: 'Zap', label: 'Subscriber', href: '/subscriptions', roles: ['admin', 'moderator'] },
 
 ];
 

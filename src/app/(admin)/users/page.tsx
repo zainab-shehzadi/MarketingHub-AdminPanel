@@ -4,8 +4,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { UsersTable } from '@/components/users/UsersTable';
-import { AddUserModal } from '@/components/users/AddUserModal';
-import { ConfirmationDialog } from '@/components/modals/ConfirmationDialog';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -31,7 +29,6 @@ export default function UsersPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
-  const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
   const limit = 10;
 
@@ -57,32 +54,9 @@ export default function UsersPage() {
     );
   }, [users, searchTerm]);
 
-  const handleAddUser = (data: unknown) => {
-    console.log('Adding user:', data);
-    setAddUserModalOpen(false);
+ 
 
-    getUsers({
-      page,
-      limit,
-      role: selectedRole === 'all' ? undefined : selectedRole,
-    });
-  };
 
-  const handleDeleteUser = (id: string) => {
-    setUserToDelete(id);
-    setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    setDeleteDialogOpen(false);
-    setUserToDelete(null);
-
-    getUsers({
-      page,
-      limit,
-      role: selectedRole === 'all' ? undefined : selectedRole,
-    });
-  };
 
   const handleRoleChange = (value: string) => {
     setSelectedRole(value);
@@ -136,7 +110,6 @@ export default function UsersPage() {
         {!isLoading && (
           <UsersTable
             users={filteredUsers}
-            onDelete={handleDeleteUser}
           />
         )}
       </>
@@ -147,15 +120,7 @@ export default function UsersPage() {
         onPageChange={setPage}
       />
 
-      <ConfirmationDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        title="Delete User"
-        description="Are you sure you want to delete this user? This action cannot be undone."
-        actionLabel="Delete"
-        isDangerous
-        onConfirm={confirmDelete}
-      />
+  
     </div>
   );
 }

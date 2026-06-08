@@ -1,5 +1,5 @@
-export type WorkspaceStatus = 'active' | 'inactive' | 'suspended';
-export type WorkspaceType = 'brand' | 'agency';
+export type WorkspaceStatus = "active" | "inactive" | "suspended" | "archived";
+export type WorkspaceType = "brand" | "agency";
 
 export type WorkspaceUser = {
   _id: string;
@@ -17,23 +17,28 @@ export type WorkspaceMember = {
   activatedAt?: string;
 };
 
+export type WorkspaceProjectTeamMember = {
+  userId?: WorkspaceUser;
+  name?: string;
+  email?: string;
+  position?: string;
+  weeklyHoursAvailable?: number;
+  type?: string;
+};
+
 export type WorkspaceProject = {
   _id: string;
   workspaceId: string;
-  owner?: WorkspaceUser;
+
+  organizationName?: string;
+  projectType?: string;
+  industry?: string;
+  websiteUrl?: string;
   status?: string;
-  organizationBasics?: {
-    projectType?: string;
-    organizationName?: string;
-    websiteUrl?: string;
-    industry?: string;
-    companySize?: string;
-    businessLocation?: string;
-    targetMarketScope?: string;
-    primaryProductsServices?: string;
-    targetAudience?: string;
-  };
-  teamMembers?: unknown[];
+
+  owner?: WorkspaceUser;
+  teamMembers?: WorkspaceProjectTeamMember[];
+
   createdAt?: string;
   updatedAt?: string;
 };
@@ -41,12 +46,18 @@ export type WorkspaceProject = {
 export type Workspace = {
   _id: string;
   workspaceType: WorkspaceType;
+  type?: WorkspaceType;
+
   name: string;
   createdBy?: WorkspaceUser;
+
   members: WorkspaceMember[];
   projects: WorkspaceProject[];
+
+  projectCount?: number;
   seatsLimit: number;
   status: WorkspaceStatus;
+
   createdAt: string;
   updatedAt: string;
   __v?: number;
@@ -64,9 +75,9 @@ export type WorkspacePagination = {
 export type GetWorkspacesParams = {
   page?: number;
   limit?: number;
-  workspaceType?: string;
-  status?: string;
-  search?: string;
+  type?: WorkspaceType;
+  status?: "active" | "archived";
+  q?: string;
 };
 
 export type GetWorkspacesResponse = {
@@ -74,6 +85,11 @@ export type GetWorkspacesResponse = {
   message: string;
   data: {
     workspaces: Workspace[];
+    filters?: {
+      type?: WorkspaceType | null;
+      status?: string | null;
+      q?: string | null;
+    };
     pagination: WorkspacePagination;
   };
   ok: boolean;

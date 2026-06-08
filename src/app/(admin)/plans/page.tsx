@@ -81,28 +81,23 @@ export default function PlansPage() {
     setFeaturesModalOpen(true);
   };
 
-  const confirmDelete = async () => {
-    if (!planToDelete) return;
-
-    setDeleteDialogOpen(false);
-    setPlanToDelete(null);
-  };
+ 
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Plans"
         description="Manage subscription plans, pricing, lifecycle status, and included features."
-        action={
-          <button
-            type="button"
-            onClick={() => setAddPlanModalOpen(true)}
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#DE5A3F] px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-[#c94d34] sm:w-auto"
-          >
-            <Plus className="h-4 w-4 shrink-0" />
-            <span className="whitespace-nowrap">Create Plan</span>
-          </button>
-        }
+        // action={
+        //   <button
+        //     type="button"
+        //     onClick={() => setAddPlanModalOpen(true)}
+        //     className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#DE5A3F] px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-[#c94d34] sm:w-auto"
+        //   >
+        //     <Plus className="h-4 w-4 shrink-0" />
+        //     <span className="whitespace-nowrap">Create Plan</span>
+        //   </button>
+        // }
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -149,16 +144,16 @@ export default function PlansPage() {
         onViewFeatures={handleViewFeatures}
       />
 
-      <AddPlanModal
+      {/* <AddPlanModal
         open={addPlanModalOpen}
         onOpenChange={setAddPlanModalOpen}
         onSubmit={() => {
           setAddPlanModalOpen(false);
           getCatalog();
         }}
-      />
+      /> */}
 
-      <EditPlanModal
+      {/* <EditPlanModal
         open={editPlanModalOpen}
         onOpenChange={setEditPlanModalOpen}
         plan={selectedPlan as any}
@@ -167,7 +162,7 @@ export default function PlansPage() {
           setSelectedPlan(null);
           getCatalog();
         }}
-      />
+      /> */}
 
       <PlanFeaturesModal
         open={featuresModalOpen}
@@ -175,7 +170,7 @@ export default function PlansPage() {
         plan={featuresPlan as any}
       />
 
-      <ConfirmationDialog
+      {/* <ConfirmationDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         title="Delete Plan"
@@ -183,7 +178,7 @@ export default function PlansPage() {
         actionLabel="Delete"
         isDangerous
         onConfirm={confirmDelete}
-      />
+      /> */}
     </div>
   );
 }

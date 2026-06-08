@@ -1,5 +1,38 @@
 export type UserRole = "admin" | "employee" | "user" | "agency" | "brand";
 
+export type EmployeeWorkspace = {
+  _id: string;
+  name: string;
+  workspaceType: string;
+  status: string;
+};
+
+export type EmployeeAccountOwner = {
+  _id: string;
+  email: string;
+  organizationType?: string;
+};
+
+export type EmployeeAssignment = {
+  projectId: string;
+  organizationName: string;
+  projectType: string;
+  projectStatus: string;
+  position: string;
+  memberType: string;
+  weeklyHoursAvailable: number;
+  workspace?: EmployeeWorkspace | null;
+  accountOwner?: EmployeeAccountOwner | null;
+};
+
+export type EmployeeEmployment = {
+  assignments: EmployeeAssignment[];
+  brands: string[];
+  brandCount: number;
+  primaryBrand?: string;
+  workspaceCount: number;
+};
+
 export type AdminUser = {
   _id: string;
   name: string;
@@ -8,9 +41,15 @@ export type AdminUser = {
   organizationType?: string;
   employeeDesignation?: string;
 
-  // Backend fields
+  planId?: string | null;
+  planKey?: string | null;
+  billingStatus?: string;
+  stripeCustomerId?: string | null;
+
   active?: boolean;
   blocked?: boolean;
+
+  employment?: EmployeeEmployment;
 
   createdAt: string;
   updatedAt: string;

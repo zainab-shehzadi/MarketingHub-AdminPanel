@@ -119,10 +119,7 @@ export function PlansTable({
                         ) : null}
                       </div>
 
-                      <p className="mt-1 max-w-[320px] text-xs text-slate-500">
-                        {plan.description}
-                      </p>
-
+                     
                       <p className="mt-1 text-xs text-slate-400">
                         {featureCount} included features
                       </p>
@@ -171,17 +168,17 @@ export function PlansTable({
                           icon: "view",
                           onClick: () => onViewFeatures?.(plan),
                         },
-                        {
-                          label: "Edit",
-                          icon: "edit",
-                          onClick: () => onEdit?.(plan),
-                        },
-                        {
-                          label: "Delete",
-                          icon: "delete",
-                          isDangerous: true,
-                          onClick: () => onDelete?.(plan._id),
-                        },
+                        // {
+                        //   label: "Edit",
+                        //   icon: "edit",
+                        //   onClick: () => onEdit?.(plan),
+                        // },
+                        // {
+                        //   label: "Delete",
+                        //   icon: "delete",
+                        //   isDangerous: true,
+                        //   onClick: () => onDelete?.(plan._id),
+                        // },
                       ]}
                     />
                   </TableCell>
