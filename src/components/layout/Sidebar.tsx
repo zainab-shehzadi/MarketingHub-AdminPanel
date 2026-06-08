@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { SIDEBAR_ROUTES, FOOTER_LINKS } from "@/lib/constants";
 import * as Icons from "lucide-react";
 import { LogOut, X } from "lucide-react";
+
+import { SIDEBAR_ROUTES, FOOTER_LINKS } from "@/lib/constants";
 import { ConfirmationDialog } from "@/components/modals/ConfirmationDialog";
 import { useAuthStore } from "@/store/auth.store";
 
@@ -17,32 +18,43 @@ type SidebarProps = {
 export function Sidebar({ open = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+
   const logout = useAuthStore((state) => state.logout);
+
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
+  useEffect(() => {
+    SIDEBAR_ROUTES.forEach((route) => {
+      router.prefetch(route.href);
+    });
+
+    FOOTER_LINKS.forEach((link) => {
+      router.prefetch(link.href);
+    });
+  }, [router]);
 
   const handleLogoutClick = () => {
     onClose?.();
     setLogoutDialogOpen(true);
-  }
-
+  };
 
   const handleConfirmLogout = () => {
     setLogoutDialogOpen(false);
     logout();
-
-    router.push("/login");
+    router.replace("/login");
   };
 
   const SidebarContent = (
-    <aside className="flex h-full w-72  flex-col border-r border-slate-200 bg-white shadow-lg">
+    <aside className="flex h-full w-72 flex-col border-r border-slate-200 bg-white shadow-lg">
       <div className="border-b border-slate-200 bg-white px-4 py-4">
         <div className="flex items-center justify-between">
           <Link
             href="/dashboard"
+            prefetch
             onClick={onClose}
-            className="group flex items-center transition-transform duration-200 hover:scale-[1.01]"
+            className="group flex flex-1 items-center justify-center transition-transform duration-200 hover:scale-[1.01]"
           >
-            <div className="flex min-h-[52px] w-[210px] items-center rounded-2xl bg-gradient-to-br from-[#242C2F] via-[#1F292C] to-[#111827] px-4 shadow-[0_10px_24px_rgba(15,23,42,0.18)] ring-1 ring-white/10">
+            <div className="flex min-h-[52px] w-[210px] items-center justify-center rounded-2xl bg-gradient-to-br from-[#242C2F] via-[#1F292C] to-[#111827] px-4 shadow-[0_10px_24px_rgba(15,23,42,0.18)] ring-1 ring-white/10">
               <img
                 src="/images/logo/logo.svg"
                 alt="FetchFocus logo"
@@ -54,7 +66,7 @@ export function Sidebar({ open = false, onClose }: SidebarProps) {
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50 lg:hidden"
+            className="ml-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50 lg:hidden"
             aria-label="Close sidebar"
           >
             <X className="h-5 w-5" />
@@ -70,39 +82,51 @@ export function Sidebar({ open = false, onClose }: SidebarProps) {
         </div>
 
         {SIDEBAR_ROUTES.map((route) => {
-          const IconComponent = (Icons as any)[route.icon];
+          const IconComponent = (Icons as unknown as Record<string, React.ElementType>)[
+            route.icon
+          ];
+
           const isActive =
             pathname === route.href || pathname.startsWith(`${route.href}/`);
 
           return (
-            <Link key={route.href} href={route.href} onClick={onClose}>
+            <Link
+              key={route.href}
+              href={route.href}
+              prefetch
+              onClick={onClose}
+              className="block"
+            >
               <div
-                className={`group flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-200 ${isActive
-                  ? "border-l-4 border-orange-600 bg-gradient-to-r from-orange-50 to-orange-100 text-orange-600 shadow-sm"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
+                className={`group flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-200 ${
+                  isActive
+                    ? "border-l-4 border-orange-600 bg-gradient-to-r from-orange-50 to-orange-100 text-orange-600 shadow-sm"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                }`}
               >
-                {IconComponent && (
+                {IconComponent ? (
                   <IconComponent
-                    className={`h-5 w-5 ${isActive
-                      ? "text-orange-600"
-                      : "text-slate-400 group-hover:text-slate-700"
-                      }`}
+                    className={`h-5 w-5 ${
+                      isActive
+                        ? "text-orange-600"
+                        : "text-slate-400 group-hover:text-slate-700"
+                    }`}
                   />
-                )}
+                ) : null}
 
                 <span
-                  className={`text-sm font-medium ${isActive
-                    ? "text-orange-600"
-                    : "text-slate-700 group-hover:text-slate-900"
-                    }`}
+                  className={`text-sm font-medium ${
+                    isActive
+                      ? "text-orange-600"
+                      : "text-slate-700 group-hover:text-slate-900"
+                  }`}
                 >
                   {route.label}
                 </span>
 
-                {isActive && (
+                {isActive ? (
                   <div className="ml-auto h-2 w-2 rounded-full bg-orange-600" />
-                )}
+                ) : null}
               </div>
             </Link>
           );
@@ -122,32 +146,41 @@ export function Sidebar({ open = false, onClose }: SidebarProps) {
               pathname === link.href || pathname.startsWith(`${link.href}/`);
 
             return (
-              <Link key={link.href} href={link.href} onClick={onClose}>
+              <Link
+                key={link.href}
+                href={link.href}
+                prefetch
+                onClick={onClose}
+                className="block"
+              >
                 <div
-                  className={`group flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-200 ${isActive
-                    ? "border-l-4 border-orange-600 bg-gradient-to-r from-orange-50 to-orange-100 text-orange-600 shadow-sm"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                    }`}
+                  className={`group flex items-center gap-3 rounded-lg px-4 py-3 transition-all duration-200 ${
+                    isActive
+                      ? "border-l-4 border-orange-600 bg-gradient-to-r from-orange-50 to-orange-100 text-orange-600 shadow-sm"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
                 >
                   <div
-                    className={`h-2 w-2 rounded-full ${isActive
-                      ? "bg-orange-600"
-                      : "bg-slate-400 group-hover:bg-slate-700"
-                      }`}
+                    className={`h-2 w-2 rounded-full ${
+                      isActive
+                        ? "bg-orange-600"
+                        : "bg-slate-400 group-hover:bg-slate-700"
+                    }`}
                   />
 
                   <span
-                    className={`text-sm font-medium ${isActive
-                      ? "text-orange-600"
-                      : "text-slate-700 group-hover:text-slate-900"
-                      }`}
+                    className={`text-sm font-medium ${
+                      isActive
+                        ? "text-orange-600"
+                        : "text-slate-700 group-hover:text-slate-900"
+                    }`}
                   >
                     {link.label}
                   </span>
 
-                  {isActive && (
+                  {isActive ? (
                     <div className="ml-auto h-2 w-2 rounded-full bg-orange-600" />
-                  )}
+                  ) : null}
                 </div>
               </Link>
             );
@@ -173,18 +206,21 @@ export function Sidebar({ open = false, onClose }: SidebarProps) {
       </div>
 
       <div
-        className={`fixed inset-0 z-50 lg:hidden ${open ? "pointer-events-auto" : "pointer-events-none"
-          }`}
+        className={`fixed inset-0 z-50 lg:hidden ${
+          open ? "pointer-events-auto" : "pointer-events-none"
+        }`}
       >
         <div
           onClick={onClose}
-          className={`absolute inset-0 bg-black/40 transition-opacity ${open ? "opacity-100" : "opacity-0"
-            }`}
+          className={`absolute inset-0 bg-black/40 transition-opacity ${
+            open ? "opacity-100" : "opacity-0"
+          }`}
         />
 
         <div
-          className={`relative h-full w-72 max-w-[85vw] transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"
-            }`}
+          className={`relative h-full w-72 max-w-[85vw] transition-transform duration-300 ${
+            open ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
           {SidebarContent}
         </div>
